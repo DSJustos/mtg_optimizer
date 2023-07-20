@@ -10,7 +10,7 @@ class Game:
         self.hand = []
         self.graveyard = []
 
-    def init_game(self):
+    def run(self):
         self.deck.shuffle()
         self.__mulligan()
 
@@ -33,15 +33,11 @@ class Game:
         self.stats.mulligan_count.append(mulligan_count)
 
         # draw 7 cards
-        opening_hand = self.deck.draw_top(7)
-
-        # count cards to keep in hand
-        num_cards_to_keep = min(8-mulligan_count, 7)
+        self.hand = self.deck.draw_top(7)
 
         # mulligan extra cards away
-        opening_hand, to_mulligan = self.strat.get_opening_hand(cards=opening_hand, num_to_keep=num_cards_to_keep)
+        if result != "Fail" and mulligan_count > 1:
+            self.hand, to_mulligan = self.strat.get_opening_hand(cards=self.hand, num_to_keep=min(8-mulligan_count, 7))
 
-
-
-
-
+            # bottom unwanted cards
+            self.deck.put_cards_deck(cards=to_mulligan, where="bottom")

@@ -5,6 +5,9 @@ class Card:
     def __init__(self, role_tag):
         self.role_tag = role_tag
 
+    def __str__(self):
+        return f"Role tag: {self.role_tag}"
+
 
 class Deck:
     def __init__(self, commander, cards):
@@ -25,3 +28,11 @@ class Deck:
     def draw_top(self, number):
         draw, self.cards = self.cards[:number], self.cards[number:]
         return draw
+
+    def put_cards_deck(self, cards, where):
+        if where == "top":
+            self.cards = cards + self.cards
+        if where == "bottom":
+            self.cards = self.cards + cards
+        else:
+            raise NotImplementedError

@@ -13,7 +13,7 @@ if __name__ == '__main__':
         zur_deck = build_zur()
 
         game = Game(deck=zur_deck, strat=strat, stats=stats)
-        game.init_game()
+        game.run()
 
     print(stats)
     stats.finalize()
@@ -21,4 +21,4 @@ if __name__ == '__main__':
     print("")
 
 # TODO:
-# finish mulligan (put back card). tenho de pensar melhor nisto pq a prioridade das cartas é situacional (uma land vale menos se já tiver 3 na mão)
+#
