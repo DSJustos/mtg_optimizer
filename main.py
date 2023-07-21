@@ -11,8 +11,7 @@ if __name__ == '__main__':
 
     for i in tqdm(range(num_sims)):
         zur_deck = build_zur()
-
-        game = Game(deck=zur_deck, strat=strat, stats=stats)
+        game = Game(deck=zur_deck, strat=strat, stats=stats, turn_limit=10)
         game.run()
 
     print(stats)
@@ -21,4 +20,4 @@ if __name__ == '__main__':
     print("")
 
 # TODO:
-#
+# fix bug no apply dos deltas. o .remove nao tá a reconhecer as cartas na mao como o mesmo objeto?

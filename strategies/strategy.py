@@ -5,16 +5,16 @@ class Strategy:
 
     def __init__(self):
         self.opening_targets = [
-                                ("land", 3),
-                                ("ramp", 1),
-                                ("counter", 99),
-                                ("protection", 99),
-                                ("draw", 99),
-                                ("ability_doubler", 99),
-                                ("removal", 99),
-                                ("drannith magistrate", 99),
-                                ("tutorable_enchantment", 99),
-                                ]
+            ("land", 3),
+            ("ramp", 1),
+            ("counter", 99),
+            ("protection", 99),
+            ("draw", 99),
+            ("ability_doubler", 99),
+            ("removal", 99),
+            ("drannith magistrate", 99),
+            ("tutorable_enchantment", 99),
+        ]
 
     def get_opening_hand(self, cards, num_to_keep):
         # TODO: dar um refactor nisto, tá outra vez esparguete por causa do código fora do loop
@@ -44,6 +44,42 @@ class Strategy:
                 return "Success"
         else:
             return "Fail"
+
+    def run_turn_strat(self, hand, command_zone, max_mana):
+        hand_deltas = []
+        field_deltas = []
+        grave_deltas = []
+        command_zone_deltas = []
+
+        max_mana_deltas = []
+
+        current_mana = max_mana
+
+        # 1-play land
+        for c in list(hand):
+            if c.role_tag == "land":
+                hand_deltas.append((c, '-'))
+                field_deltas.append((c, '+'))
+                max_mana_deltas.append((1, '+'))
+                hand.remove(c)
+                break
+
+        # 2-check for commander play
+        if command_zone and command_zone[0].cmc <= current_mana:
+            current_mana -= command_zone[0].cmc
+            command_zone_deltas = [(command_zone[0], '-')]
+            field_deltas = [(command_zone[0], '+')]
+
+        # 3-play ramp
+        for c in list(hand):
+            if c.role_tag == "ramp" and c.cmc <= current_mana:
+                current_mana -= c.cmc
+                hand_deltas.append((c, '-'))
+                field_deltas.append((c, '+'))
+                max_mana_deltas.append((1, '+'))
+                hand.remove(c)
+
+        return hand_deltas, field_deltas, grave_deltas, command_zone_deltas, max_mana_deltas, current_mana
 
     def __get_tag_stats(self, hand):
         tags = []

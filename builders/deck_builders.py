@@ -38,8 +38,7 @@ def BACKUP_build_zur():
 
 
 def build_zur():
-    # https://www.moxfield.com/decks/0Sen3s0QckGmWvp4XlIyiA
-    zur = Card(role_tag="commander")
+    zur = Card(role_tag="commander", cmc=4)
 
     decklist = []
 
@@ -47,7 +46,7 @@ def build_zur():
         decklist.append(Card(role_tag="land"))
 
     for i in range(12):
-        decklist.append(Card(role_tag="ramp"))
+        decklist.append(Card(role_tag="ramp", cmc=2))
 
     for i in range(21):
         decklist.append(Card(role_tag="tutorable_enchantment"))

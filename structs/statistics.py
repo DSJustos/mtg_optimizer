@@ -6,6 +6,8 @@ import pandas as pd
 class Statistics:
     def __init__(self, ):
         self.mulligan_count = []
+        self.mulligan_keeps_dumps = []
+        self.turn_logs = []
 
     def __mulligan_success_hist(self):
         data = ['fail' if x is np.nan else x for x in self.mulligan_count]
