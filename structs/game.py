@@ -58,35 +58,16 @@ class Game:
         # TODO: maybe preprocess this before saving to stats?
         self.stats.mulligan_keeps_dumps.append((self.hand, to_mulligan))
 
-    def __update_card_zone(self, zone, deltas):
-        for delta in deltas:
-            if delta[1] == '+':
-                zone.append(delta[0])
-            elif delta[1] == '-':
-                zone.remove(delta[0])
-
     def run_turn(self):
         # update vars
         self.turn_count += 1
         self.current_mana = self.max_mana
 
-        # check strategy
-        hand_deltas, field_deltas, grave_deltas,\
-        command_zone_deltas, max_mana_deltas, self.current_mana = self.strat.run_turn_strat(hand=self.hand,
-                                                                                            command_zone=self.command_zone,
-                                                                                            max_mana=self.current_mana)
+        # draw for turn
+        self.hand = self.hand + self.deck.draw_top(number=1)
 
-        # implement strategy
-        self.__update_card_zone(zone=self.hand, deltas=hand_deltas)
-        self.__update_card_zone(zone=self.field, deltas=field_deltas)
-        self.__update_card_zone(zone=self.graveyard, deltas=grave_deltas)
-        self.__update_card_zone(zone=self.command_zone, deltas=command_zone_deltas)
-
-        for delta in max_mana_deltas:
-            if delta[1] == '+':
-                self.max_mana += delta[0]
-            elif delta[1] == '-':
-                self.max_mana -= delta[0]
+        # run strategy for this board state
+        self.strat.run_turn_strat(game=self)
 
         # record statistics
         self.stats.turn_logs.append({"turn_count": self.turn_count,

@@ -1,3 +1,5 @@
+from mtg_optimizer.structs.game import Game
+
 from collections import Counter
 
 
@@ -45,41 +47,30 @@ class Strategy:
         else:
             return "Fail"
 
-    def run_turn_strat(self, hand, command_zone, max_mana):
-        hand_deltas = []
-        field_deltas = []
-        grave_deltas = []
-        command_zone_deltas = []
-
-        max_mana_deltas = []
-
-        current_mana = max_mana
+    def run_turn_strat(self, game: Game):
 
         # 1-play land
-        for c in list(hand):
+        for c in list(game.hand):
             if c.role_tag == "land":
-                hand_deltas.append((c, '-'))
-                field_deltas.append((c, '+'))
-                max_mana_deltas.append((1, '+'))
-                hand.remove(c)
+                game.hand.remove(c)
+                game.field.append(c)
+                game.max_mana += 1
+                game.current_mana += 1
                 break
 
         # 2-check for commander play
-        if command_zone and command_zone[0].cmc <= current_mana:
-            current_mana -= command_zone[0].cmc
-            command_zone_deltas = [(command_zone[0], '-')]
-            field_deltas = [(command_zone[0], '+')]
+        if game.command_zone and game.command_zone[0].cmc <= game.current_mana:
+            game.current_mana -= game.command_zone[0].cmc
+            game.field.append(game.command_zone[0])
+            game.command_zone.remove(game.command_zone[0])
 
         # 3-play ramp
-        for c in list(hand):
-            if c.role_tag == "ramp" and c.cmc <= current_mana:
-                current_mana -= c.cmc
-                hand_deltas.append((c, '-'))
-                field_deltas.append((c, '+'))
-                max_mana_deltas.append((1, '+'))
-                hand.remove(c)
-
-        return hand_deltas, field_deltas, grave_deltas, command_zone_deltas, max_mana_deltas, current_mana
+        for c in list(game.hand):
+            if c.role_tag == "ramp" and c.cmc <= game.current_mana:
+                game.current_mana -= c.cmc
+                game.hand.remove(c)
+                game.field.append(c)
+                game.max_mana += 1
 
     def __get_tag_stats(self, hand):
         tags = []
