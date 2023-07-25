@@ -7,7 +7,7 @@ class Card:
         self.cmc = cmc
 
     def __str__(self):
-        return f"Role tag: {self.role_tag}"
+        return f"{self.role_tag}"
 
 
 class Deck:

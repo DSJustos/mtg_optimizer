@@ -44,6 +44,8 @@ class Strategy:
         if mull_counter < 5:
             if stats["land"] >= 3 and stats["ramp"] >= 1:
                 return "Success"
+            else:
+                return None
         else:
             return "Fail"
 

@@ -1,4 +1,4 @@
-import numpy as np
+from collections import Counter
 
 class Game:
     def __init__(self, deck, strat, stats, turn_limit):
@@ -18,7 +18,6 @@ class Game:
 
     def run(self):
         self.command_zone.append(self.deck.commander)
-        self.deck.commander = []
 
         self.deck.shuffle()
         self.__mulligan()
@@ -32,10 +31,7 @@ class Game:
             hand = self.deck.look_top(number=7)
 
             result = self.strat.mulligan_strat(hand=hand, mull_counter=mulligan_count)
-            if result == "Success":
-                break
-            elif result == "Fail":
-                mulligan_count = np.nan
+            if result:
                 break
 
             self.deck.shuffle()
@@ -43,13 +39,15 @@ class Game:
 
         # record stats
         self.stats.mulligan_count.append(mulligan_count)
+        self.stats.mulligan_results.append(result)
 
         # draw 7 cards
         self.hand = self.deck.draw_top(7)
 
         # mulligan extra cards away
         to_mulligan = []
-        if result != "Fail" and mulligan_count > 1:
+
+        if result == "Fail" or mulligan_count > 1:
             self.hand, to_mulligan = self.strat.get_opening_hand(cards=self.hand, num_to_keep=min(8-mulligan_count, 7))
 
             # bottom unwanted cards
@@ -73,5 +71,5 @@ class Game:
         self.stats.turn_logs.append({"turn_count": self.turn_count,
                                      "max_mana": self.max_mana,
                                      "current_mana": self.current_mana,
-                                     "hand": self.hand,
-                                     "commmand_zone": self.command_zone})
+                                     "hand": Counter([str(i) for i in self.hand]),
+                                     "commander_already_played": len(self.command_zone) == 0})

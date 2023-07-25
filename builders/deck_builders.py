@@ -45,8 +45,10 @@ def build_zur():
     for i in range(36):
         decklist.append(Card(role_tag="land"))
 
-    for i in range(12):
+    for i in range(11):
         decklist.append(Card(role_tag="ramp", cmc=2))
+
+    decklist.append(Card(role_tag="ramp", cmc=1)) #sol ring
 
     for i in range(21):
         decklist.append(Card(role_tag="tutorable_enchantment"))
