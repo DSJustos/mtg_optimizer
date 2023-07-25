@@ -56,10 +56,15 @@ class Game:
         # TODO: maybe preprocess this before saving to stats?
         self.stats.mulligan_keeps_dumps.append((self.hand, to_mulligan))
 
+    def __remove_summoning_sickness(self):
+        for card in self.field:
+            card.has_summoning_sickness = False
+
     def run_turn(self):
         # update vars
         self.turn_count += 1
         self.current_mana = self.max_mana
+        self.__remove_summoning_sickness()
 
         # draw for turn
         self.hand = self.hand + self.deck.draw_top(number=1)

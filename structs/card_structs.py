@@ -2,9 +2,11 @@ from random import shuffle
 
 
 class Card:
-    def __init__(self, role_tag, cmc=0):
+    def __init__(self, role_tag, cmc=0, has_summoning_sickness=True):
         self.role_tag = role_tag
         self.cmc = cmc
+
+        self.has_summoning_sickness = has_summoning_sickness
 
     def __str__(self):
         return f"{self.role_tag}"
