@@ -80,3 +80,19 @@ class Strategy:
             tags.append(card.role_tag)
 
         return Counter(tags)
+
+    def check_objectives(self, game: Game):
+        objectives = [False, False]
+        for c in game.field:
+            if c.role_tag == "commander" and c.has_summoning_sickness == False:
+                objectives[0] = True
+
+                for h_c in game.hand:
+                    if h_c.role_tag == "counter" and h_c.cmc <= game.current_mana:
+                        objectives[1] = True
+
+                for f_c in game.field:
+                    if f_c.role_tag == "protection":
+                        objectives[1] = True
+
+        return objectives

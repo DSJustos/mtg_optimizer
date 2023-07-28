@@ -41,11 +41,14 @@ class Statistics:
         fig.get_figure().savefig(file_name)
         plt.clf()
 
+    def __compute_main_stat(self):
+        return self.game_df["objective_1"].sum()
+
     def finalize(self):
         self.__get_game_df()
         self.__mulligan_success_hist()
         self.__per_turn_means_histograms()
-
+        return self.__compute_main_stat()
 
     def __str__(self):
         report = "REPORT"

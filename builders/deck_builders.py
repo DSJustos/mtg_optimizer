@@ -68,7 +68,13 @@ def build_zur():
     for i in range(9):
         decklist.append(Card(role_tag="removal"))
 
-    for i in range(14):
-        decklist.append(Card(role_tag="counter"))
+    for i in range(10):
+        decklist.append(Card(role_tag="counter", cmc=2))
+
+    for i in range(3):
+        decklist.append(Card(role_tag="counter", cmc=1))
+
+    for i in range(1):
+        decklist.append(Card(role_tag="counter", cmc=0))
 
     return Deck(commander=zur, cards=decklist)

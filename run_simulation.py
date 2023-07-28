@@ -5,7 +5,7 @@ from mtg_optimizer.strategies.strategy import Strategy
 from tqdm import tqdm
 
 if __name__ == '__main__':
-    num_sims = 10000
+    num_sims = 10 #10000
     strat = Strategy()
     stats = Statistics()
 
@@ -15,9 +15,9 @@ if __name__ == '__main__':
         game.run()
 
     print(stats)
-    stats.finalize()
 
-    print("")
+    metric = stats.finalize()
+    print(f"Simulation performance: {round(metric, 2)}")
 
 # TODO:
-# fix bug no apply dos deltas. o .remove nao tá a reconhecer as cartas na mao como o mesmo objeto?
+# meter o codigo do main numa func permite usar essa func como objetivo de otimizacao para algoritmos de optim

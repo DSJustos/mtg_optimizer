@@ -73,8 +73,15 @@ class Game:
         self.strat.run_turn_strat(game=self)
 
         # record statistics
-        self.stats.turn_logs.append({"turn_count": self.turn_count,
-                                     "max_mana": self.max_mana,
-                                     "current_mana": self.current_mana,
-                                     "hand": Counter([str(i) for i in self.hand]),
-                                     "commander_already_played": len(self.command_zone) == 0})
+        statistics = {"turn_count": self.turn_count,
+                      "max_mana": self.max_mana,
+                      "current_mana": self.current_mana,
+                      "hand": Counter([str(i) for i in self.hand]),
+                      "commander_already_played": len(self.command_zone) == 0,
+                      }
+
+        objectives = self.strat.check_objectives(game=self)
+        for i, obj in enumerate(objectives):
+            statistics[f"objective_{i}"] = obj
+
+        self.stats.turn_logs.append(statistics)
